@@ -1847,6 +1847,24 @@ https://wiki.osdev.org/Printing_To_Screen
 Lab 2 - VGA output
 \end_layout
 
+\begin_layout Section
+Expected Outcome
+\end_layout
+
+\begin_layout Standard
+In this lab, we'll implement 
+\series bold
+print!
+\series default
+ and
+\series bold
+ println! 
+\series default
+in our operating system, facilitating future feature implementation and
+ output.
+ 
+\end_layout
+
 \begin_layout Chapter
 Extra knowledge
 \end_layout
