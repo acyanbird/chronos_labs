@@ -13,7 +13,7 @@ struct VGAChar {
 
 #[repr(transparent)]
 struct Buffer {
-    chars: [[Volatile<VGAChar>; BUFFER_WIDTH]; BUFFER_HEIGHT], // 二维数组
+    chars: [[Volatile<VGAChar>; BUFFER_WIDTH]; BUFFER_HEIGHT], // 2D array
 }
 
 pub struct Writer {
@@ -83,14 +83,14 @@ pub fn test_print() {
     writer.write_byte(b'e', COLOR);
 }
 
-pub fn test_clean() {
+pub fn test_rolldown() {
     let mut writer = Writer {
         column_position: 0,
         row_position: 0,
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
     };
 
-    for i in 1..= 26 {
+    for i in 1..= 25 {
         let line: u8 = i + b'0';
         writer.write_byte(line, COLOR);
         writer.write_byte(b'\n', COLOR);
