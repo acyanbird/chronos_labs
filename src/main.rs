@@ -3,7 +3,15 @@
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
-const BACKGROUND_COLOR: u16 = 0x1000; // blue background, black foreground
+const COLOR: u8 = 0x04; // black background, red foreground
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[repr(C)]
+struct ScreenChar {
+    ascii_character: u8,
+    color_code: u8,
+}
+
+
 
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start() {

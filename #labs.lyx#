@@ -1862,7 +1862,8 @@ print!
 \series default
 in our operating system, facilitating future feature implementation and
  output.
- 
+ We establish an interface that ensures safety and simplicity by isolating
+ all unsafe operations within a dedicated module.
 \end_layout
 
 \begin_layout Chapter
