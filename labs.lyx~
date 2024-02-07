@@ -1862,7 +1862,34 @@ print!
 \series default
 in our operating system, facilitating future feature implementation and
  output.
- 
+ We establish an interface that ensures safety and simplicity by isolating
+ all unsafe operations within a dedicated module.
+\end_layout
+
+\begin_layout Section
+Task 1 - Print text at a specified position using ASCII encoding
+\end_layout
+
+\begin_layout Subsection
+Introduction
+\end_layout
+
+\begin_layout Subsection
+Implementation
+\end_layout
+
+\begin_layout Subsection
+Output
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/lucia/Pictures/Screenshots/Screenshot from 2024-02-07 18-47-50.png
+	width 60page%
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Chapter
@@ -1962,6 +1989,62 @@ literal "false"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Big endian and little endian
+\end_layout
+
+\begin_layout Standard
+Big endian and little endian are two ways of ordering bytes in multi-byte
+ data types.
+ The difference lies in the order in which the bytes are stored in memory,
+ we are using little endian according to the target specification file.
+ In a little endian system, the least significant byte (LSB) is stored at
+ the lowest memory address.
+ Conversely, in a big endian system, it's the opposite.
+ Here is the example
+\end_layout
+
+\begin_layout Standard
+We have structure VGAChar
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+struct VGAChar {
+\end_layout
+
+\begin_layout Plain Layout
+
+    ascii: u8,
+\end_layout
+
+\begin_layout Plain Layout
+
+    color: u8,
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you create a VGAChar with an ascii of 0x41 ('A') and a color of 0x04,
+ it would be stored in memory as 41 04 in a little endian system.
+ This is because ascii_character is the first field in the struct, so it
+ gets the lower memory address.
 \end_layout
 
 \begin_layout Bibliography
