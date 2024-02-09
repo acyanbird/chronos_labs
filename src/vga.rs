@@ -4,7 +4,6 @@ const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
 const COLOR: u8 = 0x04; // black background, red foreground
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]
 struct VGAChar {
     ascii: u8,
@@ -71,6 +70,7 @@ impl Writer {
         }
     }
 }
+
 pub fn test_print() {
     let mut writer = Writer {
         column_position: 0,
