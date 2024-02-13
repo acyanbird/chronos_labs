@@ -1,20 +1,10 @@
 use volatile::Volatile;
-use lazy_static::lazy_static;
-use spin::Mutex;
 use core::fmt;
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
 const COLOR: u8 = 0x04; // black background, red foreground
 const ERROR_COLOR: u8 = 0x10; // blue background, black foreground
-
-lazy_static! {
-    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
-        column_position: 0,
-        row_position: 0,
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    });
-}
 
 #[repr(C)]
 #[derive(Clone, Copy)]  // derive the `Clone` and `Copy` traits
@@ -24,14 +14,14 @@ struct VGAChar {
 }
 
 #[repr(transparent)]
-struct Buffer {
+pub(crate) struct Buffer {
     chars: [[Volatile<VGAChar>; BUFFER_WIDTH]; BUFFER_HEIGHT], // 2D array
 }
 
 pub struct Writer {
-    column_position: usize,
-    row_position: usize,
-    buffer: &'static mut Buffer,
+    pub(crate) column_position: usize,
+    pub(crate) row_position: usize,
+    pub(crate) buffer: &'static mut Buffer,
 }
 
 
