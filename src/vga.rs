@@ -1,24 +1,27 @@
 use volatile::Volatile;
+use core::fmt;
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
 const COLOR: u8 = 0x04; // black background, red foreground
+const ERROR_COLOR: u8 = 0x10; // blue background, black foreground
 
 #[repr(C)]
+#[derive(Clone, Copy)]  // derive the `Clone` and `Copy` traits
 struct VGAChar {
     ascii: u8,
     color: u8,
 }
 
 #[repr(transparent)]
-struct Buffer {
+pub(crate) struct Buffer {
     chars: [[Volatile<VGAChar>; BUFFER_WIDTH]; BUFFER_HEIGHT], // 2D array
 }
 
 pub struct Writer {
-    column_position: usize,
-    row_position: usize,
-    buffer: &'static mut Buffer,
+    pub(crate) column_position: usize,
+    pub(crate) row_position: usize,
+    pub(crate) buffer: &'static mut Buffer,
 }
 
 
@@ -71,28 +74,21 @@ impl Writer {
     }
 }
 
-pub fn test_print() {
-    let mut writer = Writer {
-        column_position: 0,
-        row_position: 0,
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
-
-    writer.write_byte(b'H', COLOR);
-    writer.write_byte(b'\n', COLOR);
-    writer.write_byte(b'e', COLOR);
+impl Writer {
+    pub fn write_string(&mut self, s: &str) {
+        for byte in s.bytes() {
+            match byte {
+                // if not acceptable ASCII, print a space with error color
+                0x20..=0x7e | b'\n' => self.write_byte(byte, COLOR),
+                _ => self.write_byte(b' ', ERROR_COLOR),
+            }
+        }
+    }
 }
 
-pub fn test_rolldown() {
-    let mut writer = Writer {
-        column_position: 0,
-        row_position: 0,
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
-
-    for i in 1..= 25 {
-        let line: u8 = i + b'0';
-        writer.write_byte(line, COLOR);
-        writer.write_byte(b'\n', COLOR);
+impl fmt::Write for Writer {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        self.write_string(s);
+        Ok(())
     }
 }

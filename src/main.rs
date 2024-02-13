@@ -1,12 +1,20 @@
 #![no_std]  // disable the Rust standard library
 #![no_main] // disable all Rust-level entry points
 
-mod vga;
+mod vga; // import the `vga` module
 
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start() {
-    // vga::test_print();
-    vga::test_rolldown();
+    let mut writer = vga::Writer {
+        column_position: 0,
+        row_position: 0,
+        buffer: unsafe { &mut *(0xb8000 as *mut vga::Buffer) },
+    };
+
+    use core::fmt::Write;
+    writeln!(writer, "Hello, World! {}", 1).unwrap();
+    write!(writer, "汉字").unwrap();
+
     loop {}
 }
 
