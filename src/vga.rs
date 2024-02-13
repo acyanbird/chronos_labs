@@ -17,7 +17,7 @@ lazy_static! {
 }
 
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy)]  // derive the `Clone` and `Copy` traits
 struct VGAChar {
     ascii: u8,
     color: u8,
