@@ -14,6 +14,7 @@ pub extern "C" fn _start() {
     use core::fmt::Write;
     writeln!(writer, "Hello, World! {}", 1).unwrap();
     write!(writer, "汉字").unwrap();
+
     loop {}
 }
 
