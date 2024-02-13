@@ -5,6 +5,7 @@ const BUFFER_WIDTH: usize = 80;
 const COLOR: u8 = 0x04; // black background, red foreground
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 struct VGAChar {
     ascii: u8,
     color: u8,
