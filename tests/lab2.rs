@@ -22,6 +22,13 @@ pub fn test_runner(tests: &[&dyn Fn()]) {
     }
 }
 
+#[test_case]
+fn trivial_assertion() {
+    writeln!(WRITER.lock(),"trivial assertion... ").unwrap();
+    assert_eq!(1, 1);
+    writeln!(WRITER.lock(),"[ok]").unwrap();
+}
+
 #[panic_handler]
 fn panic(_info: &core::panic::PanicInfo) -> ! {
     loop {}
