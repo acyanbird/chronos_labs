@@ -1,4 +1,4 @@
 /target
 .idea
 \#labs.lyx#
-cargo.lock
+Cargo.lock
