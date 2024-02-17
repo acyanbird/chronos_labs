@@ -1,7 +1,8 @@
 #![no_std]  // disable the Rust standard library
 #![no_main] // disable all Rust-level entry points
 
-use chronos_labs::vga::WRITER;
+
+use chronos_labs::WRITER;
 use core::fmt::Write;
 
 #[no_mangle]    // don't mangle the name of this function
