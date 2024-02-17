@@ -1,2 +1,3 @@
 #![no_std]
-pub mod vga;
+mod vga;
+pub use vga::WRITER;
