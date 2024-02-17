@@ -100,3 +100,13 @@ impl core::fmt::Write for Writer {
         Ok(())
     }
 }
+
+impl Writer {
+    pub fn clear_screen(&mut self) {
+        for row in 0..BUFFER_HEIGHT {
+            self.clear_row(row);
+        }
+        self.column_position = 0;
+        self.row_position = 0;
+    }
+}

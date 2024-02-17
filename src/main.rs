@@ -10,6 +10,8 @@ pub extern "C" fn _start() {
         writeln!(WRITER.lock(), "Hello World {}", i).unwrap();
     }
 
+    // WRITER.lock().clear_screen();   // uncomment this line to clear the screen
+
     loop {}
 }
 
