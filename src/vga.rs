@@ -1,4 +1,6 @@
+use lazy_static::lazy_static;
 use volatile::Volatile;
+use spin::Mutex;
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
@@ -13,16 +15,23 @@ struct VGAChar {
 }
 
 #[repr(transparent)]
-pub struct Buffer {
+struct Buffer {
     chars: [[Volatile<VGAChar>; BUFFER_WIDTH]; BUFFER_HEIGHT], // 2D array
 }
 
-pub struct Writer {
-    pub column_position: usize,
-    pub row_position: usize,
-    pub buffer: &'static mut Buffer,
+pub struct  Writer {
+    column_position: usize,
+    row_position: usize,
+    buffer: &'static mut Buffer,
 }
 
+lazy_static!{
+    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
+        column_position: 0,
+        row_position: 0,
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
+    });
+}
 
 impl Writer {
     pub fn write_byte(&mut self, byte: u8, color: u8) {

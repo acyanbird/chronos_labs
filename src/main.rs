@@ -1,22 +1,14 @@
 #![no_std]  // disable the Rust standard library
 #![no_main] // disable all Rust-level entry points
 
-use chronos_labs::vga::Writer;
-use chronos_labs::vga::Buffer;
+use chronos_labs::vga::WRITER;
+use core::fmt::Write;
 
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start() {
-    let mut writer = Writer {
-        column_position: 0,
-        row_position: 0,
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
-
-    let num = 1;
-
-    use core::fmt::Write;
-    writeln!(writer, "Hello, World! {}", num).unwrap();
-    write!(writer, "汉字").unwrap();
+    for i in 0..5 {
+        writeln!(WRITER.lock(), "Hello World {}", i).unwrap();
+    }
 
     loop {}
 }
