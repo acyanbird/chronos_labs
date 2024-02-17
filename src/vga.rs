@@ -1,5 +1,4 @@
 use volatile::Volatile;
-use core::fmt;
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
@@ -14,14 +13,14 @@ struct VGAChar {
 }
 
 #[repr(transparent)]
-pub(crate) struct Buffer {
+pub struct Buffer {
     chars: [[Volatile<VGAChar>; BUFFER_WIDTH]; BUFFER_HEIGHT], // 2D array
 }
 
 pub struct Writer {
-    pub(crate) column_position: usize,
-    pub(crate) row_position: usize,
-    pub(crate) buffer: &'static mut Buffer,
+    pub column_position: usize,
+    pub row_position: usize,
+    pub buffer: &'static mut Buffer,
 }
 
 
@@ -86,8 +85,8 @@ impl Writer {
     }
 }
 
-impl fmt::Write for Writer {
-    fn write_str(&mut self, s: &str) -> fmt::Result {
+impl core::fmt::Write for Writer {
+    fn write_str(&mut self, s: &str) -> core::fmt::Result {
         self.write_string(s);
         Ok(())
     }
