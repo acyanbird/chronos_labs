@@ -45,7 +45,7 @@ fn print_newline() {
     writeln!(WRITER.lock(),"print_newline").unwrap();
     write!(WRITER.lock(),"a").unwrap();
     let char = WRITER.lock().get_ascii(1,0);
-    assert_eq!(char, b'a');
+    assert_eq!(char, b'a', "\nFailed to write newline");
     WRITER.lock().clear_screen();
 }
 
@@ -54,7 +54,7 @@ fn exception() {
     writeln!(WRITER.lock(),"中文").unwrap();
     for i in 0..6 {
         let char = WRITER.lock().get_ascii(0,i);
-        assert_eq!(char, b' ');
+        assert_eq!(char, b' '," \nFailed with exception handling, VGA cannot support all of the UTF-8 characters");
     }
 }
 

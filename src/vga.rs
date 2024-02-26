@@ -85,11 +85,12 @@ impl Writer {
 impl Writer {
     pub fn write_string(&mut self, s: &str) {
         for byte in s.bytes() {
-            match byte {
-                // if not acceptable ASCII, print a space with error color
-                0x20..=0x7e | b'\n' => self.write_byte(byte, COLOR),
-                _ => self.write_byte(b' ', ERROR_COLOR),
-            }
+            // match byte {
+            //     // if not acceptable ASCII, print a space with error color
+            //     0x20..=0x7e | b'\n' => self.write_byte(byte, COLOR),
+            //     _ => self.write_byte(b' ', ERROR_COLOR),
+            // }
+            self.write_byte(byte, COLOR);
         }
     }
 }
