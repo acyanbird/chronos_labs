@@ -45,7 +45,7 @@ fn print_newline() {
     writeln!(WRITER.lock(),"print_newline").unwrap();
     write!(WRITER.lock(),"a").unwrap();
     let char = WRITER.lock().get_ascii(1,0);
-    assert_eq!(char, b'a');
+    assert_eq!(char, b'a', "\nFailed to write newline");
     WRITER.lock().clear_screen();
 }
 
