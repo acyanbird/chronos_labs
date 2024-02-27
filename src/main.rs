@@ -4,7 +4,7 @@
 mod vga; // import the `vga` module
 
 #[no_mangle]    // don't mangle the name of this function
-pub extern "C" fn _start() {
+pub extern "C" fn _start() -> !
     let mut writer = vga::Writer {
         column_position: 0,
         row_position: 0,
