@@ -4,7 +4,7 @@
 mod vga;
 
 #[no_mangle]    // don't mangle the name of this function
-pub extern "C" fn _start() {
+pub extern "C" fn _start() -> ! {
     // vga::test_print();
     vga::test_rolldown();
     loop {}
