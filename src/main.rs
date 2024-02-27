@@ -9,7 +9,7 @@ const COLOR: u8 = 0x04; // black background, red foreground
 
 
 #[no_mangle]    // don't mangle the name of this function
-pub extern "C" fn _start() {
+pub extern "C" fn _start() -> ! {
     let vga_buffer = unsafe { core::slice::from_raw_parts_mut(0xb8000 as *mut u8, 4000) };
 
     vga_buffer[0] = b'H';
