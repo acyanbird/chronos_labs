@@ -5,7 +5,7 @@ use chronos_labs::WRITER;
 use core::fmt::Write;
 
 #[no_mangle]    // don't mangle the name of this function
-pub extern "C" fn _start() {
+pub extern "C" fn _start() -> !{
     for i in 0..5 {
         writeln!(WRITER.lock(), "Hello World {}", i).unwrap();
     }
