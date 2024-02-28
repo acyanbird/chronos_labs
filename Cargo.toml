@@ -10,7 +10,7 @@ bootloader = "0.9.23"
 volatile = "0.2.6"
 spin = "0.5.2"
 lazy_static = { version = "1.0", features = ["spin_no_std"] }
-
+x86_64 = "0.14.2"
 
 [profile.dev]
 panic = "abort"
