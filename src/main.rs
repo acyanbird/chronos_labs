@@ -13,8 +13,6 @@ pub extern "C" fn _start() -> !{
         level_4_page_table.start_address()
     ).unwrap();
 
-    // WRITER.lock().clear_screen();   // uncomment this line to clear the screen
-
     loop {}
 }
 
