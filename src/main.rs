@@ -9,6 +9,7 @@ use x86_64::structures::paging::Translate;
 use x86_64::VirtAddr;
 use chronos_labs::memory;
 
+
 entry_point!(kernel);
 
 #[no_mangle]    // don't mangle the name of this function
