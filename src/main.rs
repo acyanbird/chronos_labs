@@ -1,7 +1,7 @@
 #![no_std]  // disable the Rust standard library
 #![no_main] // disable all Rust-level entry points
 
-use chronos_labs::{memory, WRITER};
+use chronos_labs::WRITER;
 use core::fmt::Write;
 use x86_64::registers::control::Cr3;
 use bootloader::{BootInfo, entry_point};
@@ -31,7 +31,12 @@ fn kernel(boot_info: &'static BootInfo) -> !{
     let mut l2_counter = 0;
     let mut l1_counter = 0;
 
-    let l4_table = unsafe { memory::level_4_table(phys_mem_offset) };
+    let (l4_entry, _) = Cr3::read();
+
+    let phys = l4_entry.start_address();
+    let virt = phys_mem_offset + phys.as_u64();
+    let l4_ptr: *mut PageTable = virt.as_mut_ptr();
+    let l4_table = unsafe { &*l4_ptr };
     for (i, entry) in l4_table.iter().enumerate() {
         if !entry.is_unused() && l4_counter < DISPLAY_ENTRY {
             writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
