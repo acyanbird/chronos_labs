@@ -13,15 +13,6 @@ const DISPLAY_ENTRY: i32 = 1;
 
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
-    let (level_4_page_table, _) = Cr3::read();
-    writeln!(WRITER.lock(),
-        "Level 4 page table at: {:?}",
-        level_4_page_table.start_address()
-    ).unwrap();
-
-
-
-
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
 
     // counter
@@ -32,11 +23,9 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
 
     let (l4_entry, _) = Cr3::read();
 
-    let phys = l4_entry.start_address();
-    let virt = phys_mem_offset + phys.as_u64();
+    let virt = phys_mem_offset + l4_entry.start_address().as_u64();
     let l4_ptr: *mut PageTable = virt.as_mut_ptr();
     let l4_table = unsafe { &*l4_ptr };
-    writeln!(WRITER.lock(), "L4 Table address is: {:?}", l4_ptr).unwrap();
     for (i, entry) in l4_table.iter().enumerate() {
         if !entry.is_unused() && l4_counter < DISPLAY_ENTRY {
             writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
@@ -48,7 +37,6 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
             let l3_table: &PageTable = unsafe { &*l3_ptr };
 
             // print non-empty entries of the level 3 table
-            writeln!(WRITER.lock(), "L3 Table address is: {:?}", l3_ptr).unwrap();
             for (i, entry) in l3_table.iter().enumerate() {
                 if !entry.is_unused() && l3_counter < DISPLAY_ENTRY {
                     writeln!(WRITER.lock(), "   L3 Entry {}: {:?}", i, entry).unwrap();
@@ -60,7 +48,6 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
                     let l2_table: &PageTable = unsafe { &*l2_ptr };
 
                     // print non-empty entries of the level 2 table
-                    writeln!(WRITER.lock(), "L2 Table address is: {:?}", l2_ptr).unwrap();
                     for (i, entry) in l2_table.iter().enumerate() {
                         if !entry.is_unused() && l2_counter < DISPLAY_ENTRY {
                             writeln!(WRITER.lock(), "    L2 Entry {}: {:?}", i, entry).unwrap();
@@ -70,9 +57,6 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
                             let virt = phys.as_u64() + boot_info.physical_memory_offset;
                             let l1_ptr = VirtAddr::new(virt).as_mut_ptr();
                             let l1_table: &PageTable = unsafe { &*l1_ptr };
-
-                            writeln!(WRITER.lock(), "L1 Table address is: {:?}", l1_ptr).unwrap();
-
                             // print non-empty entries of the level 1 table
                             for (i, entry) in l1_table.iter().enumerate() {
                                 if !entry.is_unused() && l1_counter < DISPLAY_ENTRY {
@@ -90,7 +74,6 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
         }
 
     }
-
     loop {}
 }
 
