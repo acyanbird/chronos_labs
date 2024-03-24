@@ -10,16 +10,14 @@ use x86_64::VirtAddr;
 
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start(boot_info: &'static BootInfo) -> ! {
-    let (level_4_page_table, _) = Cr3::read();
+    let (l4_entry, _) = Cr3::read();
     writeln!(WRITER.lock(),
              "Level 4 page table at: {:?}",
-             level_4_page_table.start_address()
+             l4_entry.start_address()
     ).unwrap();
 
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
-    let (l4_entry, _) = Cr3::read();
-
     let phys = l4_entry.start_address();
     let virt = phys_mem_offset + phys.as_u64();
     let l4_ptr: *mut PageTable = virt.as_mut_ptr();
