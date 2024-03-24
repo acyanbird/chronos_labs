@@ -26,6 +26,7 @@ fn kernel(boot_info: &'static BootInfo) -> ! {
     let virt = phys_mem_offset + phys.as_u64();
     let l4_ptr: *mut PageTable = virt.as_mut_ptr();
     let l4_table = unsafe { &*l4_ptr };
+    writeln!(WRITER.lock(), "L4 Table at address: {:?}", l4_ptr).unwrap();
     for (i, entry) in l4_table.iter().enumerate() {
         // try to print all entries?
         // writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
