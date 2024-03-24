@@ -18,11 +18,15 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> ! {
 
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
-    let phys = l4_entry.start_address();
-    let virt = phys_mem_offset + phys.as_u64();
+    writeln!(WRITER.lock(),
+             "Physical memory offset: {:?}",
+             phys_mem_offset
+    ).unwrap();
+    let virt = phys_mem_offset + l4_entry.start_address().as_u64();
     let l4_ptr: *mut PageTable = virt.as_mut_ptr();
+    writeln!(WRITER.lock(), "Virtual address: {:?}", l4_ptr).unwrap();
     let l4_table = unsafe { &*l4_ptr };
-    writeln!(WRITER.lock(), "L4 Table at address: {:?}", l4_ptr).unwrap();
+
     for (i, entry) in l4_table.iter().enumerate() {
         // try to print all entries?
         // writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
