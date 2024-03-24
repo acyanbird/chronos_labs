@@ -3,8 +3,8 @@
 
 use chronos_labs::WRITER;
 use core::fmt::Write;
-use x86_64::registers::control::Cr3;
 use bootloader::{BootInfo, entry_point};
+use x86_64::registers::control::Cr3;
 use x86_64::structures::paging::PageTable;
 use x86_64::VirtAddr;
 
@@ -28,7 +28,7 @@ fn kernel(boot_info: &'static BootInfo) -> ! {
     let l4_table = unsafe { &*l4_ptr };
     for (i, entry) in l4_table.iter().enumerate() {
         // try to print all entries?
-        writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
+        // writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
 
         if !entry.is_unused() {
             writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
