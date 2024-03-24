@@ -37,6 +37,7 @@ fn kernel(boot_info: &'static BootInfo) -> !{
     let virt = phys_mem_offset + phys.as_u64();
     let l4_ptr: *mut PageTable = virt.as_mut_ptr();
     let l4_table = unsafe { &*l4_ptr };
+    writeln!(WRITER.lock(), "L4 Table address is: {:?}", l4_ptr).unwrap();
     for (i, entry) in l4_table.iter().enumerate() {
         if !entry.is_unused() && l4_counter < DISPLAY_ENTRY {
             writeln!(WRITER.lock(), "L4 Entry {}: {:?}", i, entry).unwrap();
@@ -44,10 +45,11 @@ fn kernel(boot_info: &'static BootInfo) -> !{
 
             let phys = entry.frame().unwrap().start_address();
             let virt = phys.as_u64() + boot_info.physical_memory_offset;
-            let ptr = VirtAddr::new(virt).as_mut_ptr();
-            let l3_table: &PageTable = unsafe { &*ptr };
+            let l3_ptr = VirtAddr::new(virt).as_mut_ptr();
+            let l3_table: &PageTable = unsafe { &*l3_ptr };
 
             // print non-empty entries of the level 3 table
+            writeln!(WRITER.lock(), "L3 Table address is: {:?}", l3_ptr).unwrap();
             for (i, entry) in l3_table.iter().enumerate() {
                 if !entry.is_unused() && l3_counter < DISPLAY_ENTRY {
                     writeln!(WRITER.lock(), "   L3 Entry {}: {:?}", i, entry).unwrap();
@@ -55,10 +57,11 @@ fn kernel(boot_info: &'static BootInfo) -> !{
 
                     let phys = entry.frame().unwrap().start_address();
                     let virt = phys.as_u64() + boot_info.physical_memory_offset;
-                    let ptr = VirtAddr::new(virt).as_mut_ptr();
-                    let l2_table: &PageTable = unsafe { &*ptr };
+                    let l2_ptr = VirtAddr::new(virt).as_mut_ptr();
+                    let l2_table: &PageTable = unsafe { &*l2_ptr };
 
                     // print non-empty entries of the level 2 table
+                    writeln!(WRITER.lock(), "L2 Table address is: {:?}", l2_ptr).unwrap();
                     for (i, entry) in l2_table.iter().enumerate() {
                         if !entry.is_unused() && l2_counter < DISPLAY_ENTRY {
                             writeln!(WRITER.lock(), "    L2 Entry {}: {:?}", i, entry).unwrap();
@@ -66,8 +69,10 @@ fn kernel(boot_info: &'static BootInfo) -> !{
 
                             let phys = entry.frame().unwrap().start_address();
                             let virt = phys.as_u64() + boot_info.physical_memory_offset;
-                            let ptr = VirtAddr::new(virt).as_mut_ptr();
-                            let l1_table: &PageTable = unsafe { &*ptr };
+                            let l1_ptr = VirtAddr::new(virt).as_mut_ptr();
+                            let l1_table: &PageTable = unsafe { &*l1_ptr };
+
+                            writeln!(WRITER.lock(), "L1 Table address is: {:?}", l1_ptr).unwrap();
 
                             // print non-empty entries of the level 1 table
                             for (i, entry) in l1_table.iter().enumerate() {
