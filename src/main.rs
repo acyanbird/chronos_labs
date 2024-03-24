@@ -3,15 +3,13 @@
 
 use chronos_labs::WRITER;
 use core::fmt::Write;
-use bootloader::{BootInfo, entry_point};
+use bootloader::BootInfo;
 use x86_64::registers::control::Cr3;
 use x86_64::structures::paging::PageTable;
 use x86_64::VirtAddr;
 
-entry_point!(kernel);
-
 #[no_mangle]    // don't mangle the name of this function
-fn kernel(boot_info: &'static BootInfo) -> ! {
+pub extern "C" fn _start(boot_info: &'static BootInfo) -> ! {
     let (level_4_page_table, _) = Cr3::read();
     writeln!(WRITER.lock(),
              "Level 4 page table at: {:?}",
