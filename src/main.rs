@@ -8,20 +8,18 @@ use bootloader::BootInfo;
 use x86_64::structures::paging::Translate;
 use x86_64::VirtAddr;
 use chronos_labs::memory;
-
+use chronos_labs::memory::translate_address;
 
 
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
-    let (level_4_page_table, _) = Cr3::read();
-    writeln!(WRITER.lock(),
-             "Level 4 page table at: {:?}",
-             level_4_page_table.start_address()
-    ).unwrap();
-
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
-    // new: initialize a mapper
-    let mapper = unsafe { memory::init(phys_mem_offset) };
+
+    // try to translate some addresses
+    // the VGA buffer page
+    let virt_VGA = VirtAddr::new(0xb8000);
+    let phys_VGA = unsafe { translate_address(virt_VGA, phys_mem_offset) };
+    writeln!(WRITER.lock(),"Translate from virtual address from {:?} to physical address {:?}", virt_VGA, phys_VGA);
 
     let addresses = [
         // the identity-mapped vga buffer page
@@ -29,15 +27,13 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
         // some code page
         0x201008,
         // some stack page
-        0x0100_0020_1a10,
-        // virtual address mapped to physical address 0
-        boot_info.physical_memory_offset,
+        0x0100_0020_1a10
     ];
 
     for &address in &addresses {
         let virt = VirtAddr::new(address);
-        let phys = mapper.translate_addr(virt);
-        writeln!(WRITER.lock(),"{:?} -> {:?}", virt, phys).unwrap();
+        let phys = unsafe { translate_address(virt, phys_mem_offset) };
+        writeln!(WRITER.lock(),"{:?} -> {:?}", virt, phys);
     }
 
     loop {}
