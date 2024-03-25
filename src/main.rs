@@ -3,12 +3,9 @@
 
 use chronos_labs::WRITER;
 use core::fmt::Write;
-use x86_64::registers::control::Cr3;
 use bootloader::BootInfo;
-use x86_64::structures::paging::Translate;
 use x86_64::VirtAddr;
-use chronos_labs::memory;
-use chronos_labs::memory::translate_address;
+use chronos_labs::translate::translate_address;
 
 
 #[no_mangle]    // don't mangle the name of this function
@@ -25,9 +22,10 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
         // the identity-mapped vga buffer page
         0xb8000,
         // some code page
-        0x201008,
+        0x3010_0000,
         // some stack page
-        0x0100_0020_1a10
+        0x0100_0020_1a10,
+        0xfffffff0000,
     ];
 
     for &address in &addresses {

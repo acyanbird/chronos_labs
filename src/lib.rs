@@ -1,5 +1,5 @@
 #![no_std]
 mod vga;
-pub mod memory;
+pub mod translate;
 
 pub use vga::WRITER;
