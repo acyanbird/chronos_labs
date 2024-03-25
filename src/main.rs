@@ -18,21 +18,15 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
     let phys_VGA = unsafe { translate_address(virt_VGA, phys_mem_offset) };
     writeln!(WRITER.lock(),"Translate from virtual address from {:?} to physical address {:?}", virt_VGA, phys_VGA);
 
-    let addresses = [
-        // the identity-mapped vga buffer page
-        0xb8000,
-        // some code page
-        0x3010_0000,
-        // some stack page
-        0x0100_0020_1a10,
-        0xfffffff0000,
-    ];
+    // exsting page
+    let virt_existing = VirtAddr::new(0x201008);
+    let phys_existing = unsafe { translate_address(virt_existing, phys_mem_offset) };
+    writeln!(WRITER.lock(),"Translate from virtual address from {:?} to physical address {:?}", virt_existing, phys_existing);
 
-    for &address in &addresses {
-        let virt = VirtAddr::new(address);
-        let phys = unsafe { translate_address(virt, phys_mem_offset) };
-        writeln!(WRITER.lock(),"{:?} -> {:?}", virt, phys);
-    }
+    // non-existing page
+    let virt_non_existing = VirtAddr::new(0xffffffffc0000000);
+    let phys_non_existing = unsafe { translate_address(virt_non_existing, phys_mem_offset) };
+    writeln!(WRITER.lock(),"Translate from virtual address from {:?} to physical address {:?}", virt_non_existing, phys_non_existing);
 
     loop {}
 }
