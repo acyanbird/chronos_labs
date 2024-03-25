@@ -11,7 +11,6 @@ use chronos_labs::translate::translate_address;
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
-
     // try to translate some addresses
     // the VGA buffer page
     let virt_VGA = VirtAddr::new(0xb8000);
