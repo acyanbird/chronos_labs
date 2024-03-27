@@ -8,12 +8,13 @@ pub unsafe fn translate_address(addr: VirtAddr, physical_memory_offset: VirtAddr
                         -> Option<PhysAddr>
 {
     let (l4_frame, _) = Cr3::read();
+    let mut frame_addr = l4_frame;
+
 
     // get offset of each table
     let table_offset = [
         addr.p4_index(), addr.p3_index(), addr.p2_index(), addr.p1_index()
     ];
-    let mut frame_addr = l4_frame;
 
     // traverse the page table to find the frame corresponding to the address
     for &index in &table_offset {
@@ -30,6 +31,6 @@ pub unsafe fn translate_address(addr: VirtAddr, physical_memory_offset: VirtAddr
         };
     }
 
-    // 通过添加页面偏移量来计算物理地址
+    // calculate the physical address
     Some(frame_addr.start_address() + u64::from(addr.page_offset()))
 }
