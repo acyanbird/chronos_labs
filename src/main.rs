@@ -3,12 +3,12 @@
 
 use chronos_labs::WRITER;
 use core::fmt::Write;
+use chronos_labs::interrupts;
 
 #[no_mangle]    // don't mangle the name of this function
 pub extern "C" fn _start() -> !{
-    for i in 0..5 {
-        writeln!(WRITER.lock(), "Hello World {}", i).unwrap();
-    }
+    interrupts::init_idt();
+    x86_64::instructions::interrupts::int3(); // invoke a breakpoint exception
 
     // WRITER.lock().clear_screen();   // uncomment this line to clear the screen
 
