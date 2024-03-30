@@ -7,12 +7,12 @@ static mut IDT: InterruptDescriptorTable = InterruptDescriptorTable::new();
 
 pub fn init_idt() {
     unsafe {
-        IDT.breakpoint.set_handler_fn(breakpoint_handler);
+        IDT.breakpoint.set_handler_fn(breakpoint);
         IDT.load();
     }
 }
 
-extern "x86-interrupt" fn breakpoint_handler(
+extern "x86-interrupt" fn breakpoint(
     stack_frame: InterruptStackFrame)
 {
    writeln!(WRITER.lock(),"EXCEPTION: BREAKPOINT\n{:#?}", stack_frame).unwrap();
