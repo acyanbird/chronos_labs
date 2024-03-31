@@ -5,12 +5,12 @@
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use chronos_labs::WRITER;
+use chronos_labs::{interrupts, WRITER};
 use core::fmt::Write;
 
 #[no_mangle] // don't mangle the name of this function
 pub extern "C" fn _start() -> ! {
-
+    interrupts::init_idt();
     test_main();
     loop {}
 }
