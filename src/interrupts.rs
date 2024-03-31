@@ -56,7 +56,7 @@ extern "x86-interrupt" fn keyboard(_stack_frame: InterruptStackFrame)
 
 
     if let Some(key) = key {
-        write!(WRITER.lock(), "{}", key);
+        writeln!(WRITER.lock(), "{}", key);
     }
 
     unsafe {
