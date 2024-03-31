@@ -15,7 +15,7 @@ pic8259 = "0.10.1"
 
 
 [profile.dev]
-panic = "abort"
+#panic = "abort"
 
 [profile.release]
 panic = "abort"
