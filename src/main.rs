@@ -6,6 +6,7 @@ use core::fmt::Write;
 use bootloader::BootInfo;
 use x86_64::VirtAddr;
 use chronos_labs::translate::translate_address;
+use chronos_labs::interrupts;
 
 
 #[no_mangle]    // don't mangle the name of this function
@@ -27,6 +28,10 @@ pub extern "C" fn _start(boot_info: &'static BootInfo) -> !{
     let virt_non_existing = VirtAddr::new(0xffffffffc0000000);
     let phys_non_existing = unsafe { translate_address(virt_non_existing, phys_mem_offset) };
     writeln!(WRITER.lock(),"Translate from virtual address from {:?} to physical address {:?}", virt_non_existing, phys_non_existing);
+    interrupts::init_idt();
+    unsafe { interrupts::PICS.lock().initialize() };
+    x86_64::instructions::interrupts::enable();
+    writeln!(WRITER.lock(), "Keybroad input here:").unwrap();
 
     loop {}
 }
