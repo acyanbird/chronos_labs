@@ -7,6 +7,7 @@
 
 use chronos_labs::{interrupts, WRITER};
 use core::fmt::Write;
+use chronos_labs::interrupts::NUMLOCK;
 
 #[no_mangle] // don't mangle the name of this function
 pub extern "C" fn _start() -> ! {
@@ -28,6 +29,13 @@ pub fn test_runner(tests: &[&dyn Fn()]) {
 fn test_breakpoint_exception() {
     // invoke a breakpoint exception
     x86_64::instructions::interrupts::int3();
+    WRITER.lock().clear_screen();
+}
+
+#[test_case]
+fn test_numlock_initial_state() {
+    let numlock_state = NUMLOCK.lock();
+    assert!(!*numlock_state, "NUMLOCK should be initially off");
 }
 
 #[panic_handler]
