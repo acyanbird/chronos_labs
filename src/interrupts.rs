@@ -14,7 +14,7 @@ pub fn init_idt() {
     unsafe {
         IDT.breakpoint.set_handler_fn(breakpoint);
         IDT.load();
-        IDT[0].set_handler_fn(timer);
+        IDT[0].set_handler_fn(timer_off);
         IDT[1].set_handler_fn(keyboard);
     }
 }
@@ -30,6 +30,15 @@ extern "x86-interrupt" fn breakpoint(stack_frame: InterruptStackFrame)
 extern "x86-interrupt" fn timer(_stack_frame: InterruptStackFrame)
 {
     write!(WRITER.lock(), "_").unwrap();
+    unsafe {
+        PICS.lock()
+            .notify_end_of_interrupt(0);
+    }
+}
+
+extern "x86-interrupt" fn timer_off(_stack_frame: InterruptStackFrame)
+{
+    write!(WRITER.lock(), "").unwrap();
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(0);
@@ -88,7 +97,7 @@ extern "x86-interrupt" fn keyboard(_stack_frame: InterruptStackFrame)
 
 
     if let Some(key) = key {
-        write!(WRITER.lock(), "{}", key);
+        writeln!(WRITER.lock(), "{}", key);
     }
 
     unsafe {
