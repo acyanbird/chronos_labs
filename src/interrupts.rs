@@ -15,5 +15,5 @@ pub fn init_idt() {
 extern "x86-interrupt" fn breakpoint(
     stack_frame: InterruptStackFrame)
 {
-    writeln!(WRITER.lock(), "Break point:\n{:#?}", stack_frame).unwrap();
+    writeln!(WRITER.lock(), "Break point works.\n").unwrap();
 }
