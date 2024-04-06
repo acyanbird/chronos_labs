@@ -19,8 +19,9 @@ pub static PICS: Mutex<ChainedPics> = Mutex::new(unsafe { ChainedPics::new(0, 8)
 
 
 extern "x86-interrupt" fn breakpoint(stack_frame: InterruptStackFrame)
+
 {
-    writeln!(WRITER.lock(), "Break point:\n{:#?}", stack_frame).unwrap();
+    writeln!(WRITER.lock(), "Break point works.\n").unwrap();
 }
 
 extern "x86-interrupt" fn timer(_stack_frame: InterruptStackFrame)
