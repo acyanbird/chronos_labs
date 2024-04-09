@@ -22,12 +22,12 @@ pub fn init_idt() {
 pub static PICS: Mutex<ChainedPics> = Mutex::new(unsafe { ChainedPics::new(0, 8) });
 
 
-extern "x86-interrupt" fn breakpoint(stack_frame: InterruptStackFrame)
+extern "x86-interrupt" fn breakpoint(_: InterruptStackFrame)
 {
     writeln!(WRITER.lock(), "Break point works.\n").unwrap();
 }
 
-extern "x86-interrupt" fn timer(_stack_frame: InterruptStackFrame)
+extern "x86-interrupt" fn timer(_: InterruptStackFrame)
 {
     write!(WRITER.lock(), "_").unwrap();
     unsafe {
@@ -36,7 +36,7 @@ extern "x86-interrupt" fn timer(_stack_frame: InterruptStackFrame)
     }
 }
 
-extern "x86-interrupt" fn timer_off(_stack_frame: InterruptStackFrame)
+extern "x86-interrupt" fn timer_off(_: InterruptStackFrame)
 {
     write!(WRITER.lock(), "").unwrap();
     unsafe {
@@ -45,7 +45,7 @@ extern "x86-interrupt" fn timer_off(_stack_frame: InterruptStackFrame)
     }
 }
 
-extern "x86-interrupt" fn keyboard(_stack_frame: InterruptStackFrame)
+extern "x86-interrupt" fn keyboard(_: InterruptStackFrame)
 {
     let mut port = Port::new(0x60);
     let scancode: u8 = unsafe { port.read() };
