@@ -1,1 +1,1 @@
-Please see https://github.com/acyanbird/chronos-labsheets for the latest version of this labsheet.
+Please see https://github.com/acyanbird/chronos-labsheet for the latest version of this labsheet.
