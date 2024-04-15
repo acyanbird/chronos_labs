@@ -7,4 +7,3 @@ target = "chronos_labs.json"
 
 [target.'cfg(target_os = "none")']
 runner = "bootimage runner"
-# Specifies the command that Cargo should use to run the binary after building it.
