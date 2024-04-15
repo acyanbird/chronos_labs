@@ -19,7 +19,7 @@ struct Buffer {
     chars: [[Volatile<VGAChar>; BUFFER_WIDTH]; BUFFER_HEIGHT], // 2D array
 }
 
-pub struct  Writer {
+pub struct Writer {
     column_position: usize,
     row_position: usize,
     buffer: &'static mut Buffer,
