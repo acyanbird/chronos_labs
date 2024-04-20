@@ -8,6 +8,8 @@ use x86_64::instructions::port::Port;
 
 static mut IDT: InterruptDescriptorTable = InterruptDescriptorTable::new();
 static NUMLOCK: Mutex<bool> = Mutex::new(false);
+pub static PICS: Mutex<ChainedPics> = Mutex::new(unsafe { ChainedPics::new(0, 8) });
+
 
 
 pub fn init_idt() {
@@ -18,9 +20,6 @@ pub fn init_idt() {
         IDT[1].set_handler_fn(keyboard);
     }
 }
-
-pub static PICS: Mutex<ChainedPics> = Mutex::new(unsafe { ChainedPics::new(0, 8) });
-
 
 extern "x86-interrupt" fn breakpoint(_: InterruptStackFrame)
 {
