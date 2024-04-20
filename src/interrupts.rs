@@ -43,7 +43,7 @@ extern "x86-interrupt" fn timer_off(_: InterruptStackFrame)
     }
 }
 
-extern "x86-interrupt" fn keyboard(_s: InterruptStackFrame)
+extern "x86-interrupt" fn keyboard(_: InterruptStackFrame)
 {
     let mut port = Port::new(0x60);
     let scancode: u8 = unsafe { port.read() };
